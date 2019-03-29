@@ -1,0 +1,14 @@
+{:paths ["src" "dev"]
+ 
+ :deps
+ {org.clojure/clojure {:mvn/version "1.10.1-beta1"}
+  mvt-clj {:mvn/version "0.1.6-SNAPSHOT"}
+  clj-http {:mvn/version "3.7.0"}
+  cheshire {:mvn/version "5.8.0"}}
+ 
+ :aliases
+ {:socket {:jvm-opts ["-Xms2g"
+                      "-Xmx2g"
+                      "-server"
+                      "-Dclojure.server.repl={:port,5555,:accept,mvt-clj.repl/socket-repl}"]}}}
+
