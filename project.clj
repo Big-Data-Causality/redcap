@@ -16,9 +16,12 @@
   :profiles
   {:dev 
    {:plugins [[lein-exec "0.3.7"]]
-   :dependencies [[xyz.zcaudate/code.test           "4.0.1"]
+    :dependencies [[xyz.zcaudate/code.test           "4.0.1"]
                    [xyz.zcaudate/code.manage         "4.0.1"]
                    [xyz.zcaudate/code.java           "4.0.1"]
                    [xyz.zcaudate/code.maven          "4.0.1"]
                    [xyz.zcaudate/code.doc            "4.0.1"]
-                   [xyz.zcaudate/code.dev            "4.0.1"]]}})
+                   [xyz.zcaudate/code.dev            "4.0.1"]]}}
+  :deploy-repositories [["clojars"
+                         {:url  "https://clojars.org/repo"
+                          :sign-releases false}]])
