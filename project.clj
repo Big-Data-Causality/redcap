@@ -1,4 +1,4 @@
-(defproject xyz.zcaudate/redcap "0.1.0-SNAPSHOT"
+(defproject xyz.zcaudate/redcap "0.1.1"
   :description "a redcap client"
   :url "https://github.com/zcaudate-xyz/redcap"
   :license  {:name "MIT License"
