@@ -3,6 +3,9 @@
   :url "https://github.com/zcaudate-xyz/redcap"
   :license  {:name "MIT License"
              :url  "http://opensource.org/licenses/MIT"}
+  :aliases
+  {"test"  ["exec" "-ep" "(use 'code.test) (def res (run :all)) (System/exit (+ (:failed res) (:thrown res)))"]}
+  
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [metosin/malli                    "0.14.0"]
                  [xyz.zcaudate/net.http            "4.0.1"]
