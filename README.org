@@ -1,5 +1,4 @@
-redcap
-========
+#redcap
 
 REDCap client library for Clojure
 
