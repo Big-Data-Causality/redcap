@@ -78,7 +78,9 @@
                  (when default
                    [nk default]))))
        (into {:action action
-              :content content})))
+              :content content
+              :format "json"
+              :returnFormat "json"})))
 
 (defn generate-unit
   "creates a unit"

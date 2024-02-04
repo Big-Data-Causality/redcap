@@ -198,8 +198,7 @@
                                           :export-data-access-groups {:type :boolean}
                                           :filter-logic         {:type :string}}}}]
    [:record      {:export {:content "record"
-                           :params  {:type   {:type TypeSpec
-                                              :required true}
+                           :params  {:type   {:type TypeSpec}
                                      :records  {:type [:vector :string]}
                                      :fields   {:type [:vector :string]}
                                      :forms    {:type [:vector :string]}

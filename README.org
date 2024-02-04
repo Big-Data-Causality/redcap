@@ -1,5 +1,10 @@
-The first argument, called config, for all functions is a hash-map
-with two entries :api-url and :token.  The value of the :api-url entry
-is a string containing the url, formatted with a trailing slash, of a
-REDCap server.  The value of the :token entry is a string containing a
-REDCap API token.
+redcap
+========
+
+REDCap client library for Clojure
+
+## License
+
+Copyright © 2024 Chris Zheng
+
+Distributed under the MIT License.
