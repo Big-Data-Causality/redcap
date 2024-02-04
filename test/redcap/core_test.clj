@@ -26,10 +26,8 @@
   ^:hidden
   
   (rc/create-api-form (last (sort rc/+units+)))
-  => '(clojure.core/defn switch-dag
-        [{:keys [url token return]} {:as params, :keys [dag]}]
-        (redcap.core/call-api (clojure.core/get redcap.core/+units+ :switch-dag) params)))
-
+  => '(clojure.core/defn switch-dag [{:keys [url token return], :as api} {:as params, :keys [dag]}]
+        (redcap.core/call-api (clojure.core/get redcap.core/+units+ :switch-dag) api params)))
 
 (comment
 

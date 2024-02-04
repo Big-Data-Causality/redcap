@@ -51,25 +51,25 @@
        (assoc :category :record
               :tag :export
               :action "export")))
-  => [:map [:token [:string {:min 32, :max 32}]]
-      [:content [:enum "record"]]
-      [:action [:enum "export"]]
-      [:format {:optional true} [:enum #:error{:message "should be csv|json|xml"} "csv" "json" "xml"]]
-      [:returnFormat {:optional true} [:enum #:error{:message "should be csv|json|xml"} "csv" "json" "xml"]]
-      [:csvDelimiter {:optional true} [:enum #:error{:message "should be , or ; or | or ^ or \t"} "," ";" "|" "^" "\t"]]
-      [:dateRangeBegin {:optional true} inst?]
-      [:dateRangeEnd {:optional true} inst?]
-      [:events {:optional true} [:vector :string]]
-      [:exportCheckboxLabel {:optional true} :boolean]
-      [:exportDataAccessGroups {:optional true} :boolean]
-      [:exportSurveyFields {:optional true} :boolean]
-      [:fields {:optional true} [:vector :string]]
-      [:forms {:optional true} [:vector :string]]
-      [:rawOrLabel {:optional true} [:enum #:error{:message "should be raw|label"} "raw" "label"]]
-      [:rawOrLabelHeaders {:optional true} [:enum #:error{:message "should be raw|label"} "raw" "label"]]
-      [:records {:optional true} [:vector :string]]
-      [:type {} [:enum #:error{:message "should be flat|eav|record"} "flat" "eav" "record"]]])
-  
+  [:map
+   [:token [:string {:min 32, :max 32}]]
+   [:content [:enum "record"]] [:action [:enum "export"]]
+   [:format {:optional true} [:enum #:error{:message "should be csv|json|xml"} "csv" "json" "xml"]]
+   [:returnFormat {:optional true} [:enum #:error{:message "should be csv|json|xml"} "csv" "json" "xml"]]
+   [:csvDelimiter {:optional true} [:enum #:error{:message "should be , or ; or | or ^ or \t"} "," ";" "|" "^" "\t"]]
+   [:dateRangeBegin {:optional true} inst?]
+   [:dateRangeEnd {:optional true} inst?]
+   [:events {:optional true} [:vector :string]]
+   [:exportCheckboxLabel {:optional true} :boolean]
+   [:exportDataAccessGroups {:optional true} :boolean]
+   [:exportSurveyFields {:optional true} :boolean]
+   [:fields {:optional true} [:vector :string]]
+   [:forms {:optional true} [:vector :string]]
+   [:rawOrLabel {:optional true} [:enum #:error{:message "should be raw|label"} "raw" "label"]]
+   [:rawOrLabelHeaders {:optional true} [:enum #:error{:message "should be raw|label"} "raw" "label"]]
+   [:records {:optional true} [:vector :string]]
+   [:type {:optional true} [:enum #:error{:message "should be flat|eav|record"} "flat" "eav" "record"]]])
+
 ^{:refer redcap.unit/generate-unit-defaults :added "0.1"}
 (fact "generate unit defaults"
   ^:hidden
@@ -80,7 +80,7 @@
        (assoc :category :record
               :tag :export
               :action "export")))
-  => {:action "export", :content "record"}
+  => {:action "export", :content "record", :format "json", :returnFormat "json"}
 
   (unit/generate-unit-defaults
    (-> (into {} meta/+api+) 
@@ -88,7 +88,7 @@
        (assoc :category :version
               :tag :export
               :action "export")))
-  => {:action "export", :content "version"})
+  => {:action "export", :content "version", :format "json", :returnFormat "json"})
 
 ^{:refer redcap.unit/generate-unit :added "0.1"}
 (fact "creates a unit"
@@ -104,7 +104,7 @@
   =>
   (contains
    {:input    map?
-    :defaults {:action "export", :content "version"},
+    :defaults {:action "export", :content "version", :format "json", :returnFormat "json"},
     :spec [:map
            [:token [:string {:min 32, :max 32}]]
            [:content [:enum "version"]] [:action [:enum "export"]]

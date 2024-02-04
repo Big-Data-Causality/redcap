@@ -15,7 +15,8 @@
                  [xyz.zcaudate/std.json            "4.0.1"]]
   :profiles
   {:dev 
-   {:dependencies [[xyz.zcaudate/code.test           "4.0.1"]
+   {:plugins [[lein-exec "0.3.7"]]
+   :dependencies [[xyz.zcaudate/code.test           "4.0.1"]
                    [xyz.zcaudate/code.manage         "4.0.1"]
                    [xyz.zcaudate/code.java           "4.0.1"]
                    [xyz.zcaudate/code.maven          "4.0.1"]
