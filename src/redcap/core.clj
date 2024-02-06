@@ -6,7 +6,31 @@
             [redcap.meta :as meta]
             [redcap.unit :as unit]
             [net.http :as http]
-            [malli.core :as m]))
+            [malli.core :as m]
+            [malli.error :as me]))
+
+(def ^:dynamic *site-opts*)
+
+(def ^:dynamic *unit*)
+
+(def ^:dynamic *input*)
+
+(def ^:dynamic *interim*)
+
+(def ^:dynamic *output*)
+
+(defn set-site-opts
+  "sets the default site opts"
+  {:added "0.1"}
+  [api]
+  (alter-var-root #'*site-opts* (fn [_] api)))
+
+(defmacro with-site-opts
+  "binds the actual site opts"
+  {:added "0.1"}
+  [[api] & body]
+  `(binding [*site-opts* ~api]
+     ~@body))
 
 (def +units+
   (h/map-juxt
@@ -30,17 +54,30 @@
   "calls the redcap api"
   {:added "0.1"}
   [{:keys [defaults
+           transforms
            spec] :as unit}
-   {:keys [url token return]}
-   params]
-  (let [input (merge defaults {:token token} params)
+   params
+   site-opts]
+  (let [{:keys [url token return]} (or site-opts
+                                       *site-opts*
+                                       (throw (ex-info "Missing value for *site-opts*")))
+        input (merge defaults {:token token} params)
+        
+        _     (alter-var-root #'*input* (fn [_] input))
+        _     (alter-var-root #'*unit*  (fn [_] unit))        
         _     (when (not (m/validate spec input))
                 (throw (ex-info "Not valid"
-                                {:explain (m/explain spec input)})))
-        body  (http/encode-form-params input)
+                                {:reason (me/humanize (m/explain spec input))})))
+        interim  (reduce (fn [interim [k f]]
+                           (update interim k f))
+                         input
+                         (seq transforms))
+        _     (alter-var-root #'*interim* (fn [_] interim))
+        body  (http/encode-form-params  interim)
         raw   (http/post url {:headers {"Content-Type" "application/x-www-form-urlencoded"
                                         "Accept" "application/json"}
-                              :body body})]
+                              :body body})
+        _     (alter-var-root #'*output* (fn [_] raw))]
     (cond (= :raw return)
           raw
           
@@ -56,13 +93,36 @@
   {:added "0.1"}
   [[label unit]]
   `(defn ~(symbol (name label))
-    [~'{:keys [url token return] :as api}
-     {:keys ~(mapv (comp symbol name)
-                   (keys (get-in unit [:input :params])) )
-      :as ~'params}]
-    (call-api (get +units+ ~label)
-              ~'api
-              ~'params)))
+     [~'& [{:keys ~(mapv (comp symbol name)
+                         (keys (get-in unit [:input :params])) )
+            :as ~'params}
+           ~'{:keys [url token return] :as site-opts}]]
+     (call-api (get +units+ ~label)
+               ~'params
+               ~'site-opts)))
 
 (def +functions+
   (eval (mapv create-api-form (sort +units+))))
+
+(comment
+  (export-record-next-name)
+  (export-project-xml)
+  (export-record)
+  
+  (import-record
+   {:data [{"age" "15", "name" "Test 2", "form_2_complete" "2", "record_id" "2", "form_1_complete" "2"}]})
+
+  (import-record
+   {:data [{"age" "15", "name" "Test 2", "form_2_complete" "2", "record_id" "3", "form_1_complete" "2"}]})
+  
+  (into {} *unit*)
+  
+  *input*
+  
+  (require 'jvm.tool)
+  (h/prn +functions+)
+  (set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
+                  :token "0CCE5D579105060CB418DB05FCF13045"})
+  (rc/import-metadata
+   
+   {:data []}))

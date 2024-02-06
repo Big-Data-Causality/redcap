@@ -67,7 +67,8 @@
            tag
            content
            action
-           params]
+           params
+           overwrite]
     :as input}]
   (->> params
        (keep (fn [[k m]]
@@ -77,10 +78,26 @@
                                         str/camel-case)) k)]
                  (when default
                    [nk default]))))
-       (into {:action action
-              :content content
-              :format "json"
-              :returnFormat "json"})))
+       (into (merge {:action action
+                     :content content
+                     :format "json"
+                     :returnFormat "json"}
+                    overwrite))))
+
+(defn generate-unit-transforms
+  "generates the unit transforms"
+  {:added "0.1"}
+  [{:keys [params]
+    :as input}]
+  (->> params
+       (keep (fn [[k m]]
+               (let [{:keys [transform
+                             transform-key]} m
+                     nk  ((str/wrap (or transform-key
+                                        str/camel-case)) k)]
+                 (when transform
+                   [nk transform]))))
+       (into {})))
 
 (defn generate-unit
   "creates a unit"
@@ -90,11 +107,13 @@
            content
            params]
     :as input}]
-  (let [spec     (generate-unit-spec input)
-        defaults (generate-unit-defaults input)]
+  (let [spec       (generate-unit-spec input)
+        defaults   (generate-unit-defaults input)
+        transforms (generate-unit-transforms input)]
     (map->Unit
-     {:input    input
-      :defaults defaults
-      :spec     spec})))
+     {:input      input
+      :transforms transforms
+      :defaults   defaults
+      :spec       spec})))
 
 

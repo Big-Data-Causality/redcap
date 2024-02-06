@@ -190,6 +190,8 @@
                                                     :transform json/write
                                                     :required true}}}
                   :export-xml  {:content "project_xml"
+                                :overwrite {:format "xml"
+                                            :returnFormat "xml"}
                                 :params  {:return-metadata-only {:type :boolean}
                                           :records              {:type [:vector :string]}
                                           :fields               {:type [:vector :string]}
@@ -237,6 +239,7 @@
                                                         :transform-key str/snake-case}
                                      :arms         {:type :string}}}
                   :generate-next {:content "generateNextRecordName"
+                                  :label   "export-record-next-name"
                                   :action  "export"}}]
    [:report      {:export {:content "report"
                            :params {:report-id {:type :string

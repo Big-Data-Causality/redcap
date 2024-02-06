@@ -1,4 +1,4 @@
-(defproject xyz.zcaudate/redcap "0.1.1"
+(defproject xyz.zcaudate/redcap "0.1.2"
   :description "a redcap client"
   :url "https://github.com/zcaudate-xyz/redcap"
   :license  {:name "MIT License"
@@ -16,7 +16,8 @@
   :profiles
   {:dev 
    {:plugins [[lein-exec "0.3.7"]]
-    :dependencies [[xyz.zcaudate/code.test           "4.0.1"]
+    :dependencies [[etaoin                          "1.0.40"]
+                   [xyz.zcaudate/code.test           "4.0.1"]
                    [xyz.zcaudate/code.manage         "4.0.1"]
                    [xyz.zcaudate/code.java           "4.0.1"]
                    [xyz.zcaudate/code.maven          "4.0.1"]

@@ -2,6 +2,23 @@
   (:use code.test)
   (:require [redcap.core :as rc]))
 
+^{:refer redcap.core/set-site-opts :added "0.1"}
+(fact "sets the default site opts"
+  ^:hidden
+  
+  (rc/set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
+                     :token "0CCE5D579105060CB418DB05FCF13045"
+                     :return :raw}))
+
+^{:refer redcap.core/with-site-opts :added "0.1"}
+(fact "binds the actual site opts"
+  ^:hidden
+  
+  (rc/with-site-opts [{:url   "https://CHANGED.COM"
+                       :token ""}]
+    rc/*site-opts*)
+  => {:url "https://CHANGED.COM", :token ""})
+
 ^{:refer redcap.core/parse-body :added "0.1"}
 (fact "parses the raw return"
   ^:hidden
@@ -19,15 +36,31 @@
   => "14.0.10")
 
 ^{:refer redcap.core/call-api :added "0.1"}
-(fact "calls the redcap api")
+(fact "calls the redcap api"
+  ^:hidden
+  
+  (redcap.core/call-api
+   (:export-project-info rc/+units+)
+   {}
+   {:url   "https://redcapdemo.vanderbilt.edu/api/"
+    :token "0CCE5D579105060CB418DB05FCF13045"
+    :return :raw})
+  => map?)
 
 ^{:refer redcap.core/create-api-form :added "0.1"}
 (fact "creates an api form"
   ^:hidden
   
   (rc/create-api-form (last (sort rc/+units+)))
-  => '(clojure.core/defn switch-dag [{:keys [url token return], :as api} {:as params, :keys [dag]}]
-        (redcap.core/call-api (clojure.core/get redcap.core/+units+ :switch-dag) api params)))
+  => '(clojure.core/defn switch-dag
+        [& [{:keys [dag] :as params}
+            {:keys [url token return],
+             :as site-opts}]]
+        (redcap.core/call-api
+         (clojure.core/get redcap.core/+units+ :switch-dag)
+         params
+         site-opts)))
+
 
 (comment
 

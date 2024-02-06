@@ -90,6 +90,18 @@
               :action "export")))
   => {:action "export", :content "version", :format "json", :returnFormat "json"})
 
+
+
+^{:refer redcap.unit/generate-unit-transforms :added "0.1"}
+(fact "generates the unit transforms"
+  ^:hidden
+
+  (unit/generate-unit-transforms
+        (-> (into {} meta/+api+) 
+            (get-in [:record :import])
+            ))
+  => (contains-in {:data fn?}))
+
 ^{:refer redcap.unit/generate-unit :added "0.1"}
 (fact "creates a unit"
   ^:hidden
