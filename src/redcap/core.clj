@@ -9,15 +9,15 @@
             [malli.core :as m]
             [malli.error :as me]))
 
-(def ^:dynamic *site-opts*)
+(def ^:dynamic *site-opts* nil)
 
-(def ^:dynamic *unit*)
+(def ^:dynamic *unit* nil)
 
-(def ^:dynamic *input*)
+(def ^:dynamic *input* nil)
 
-(def ^:dynamic *interim*)
+(def ^:dynamic *interim* nil)
 
-(def ^:dynamic *output*)
+(def ^:dynamic *output* nil)
 
 (defn set-site-opts
   "sets the default site opts"
@@ -60,7 +60,7 @@
    site-opts]
   (let [{:keys [url token return]} (or site-opts
                                        *site-opts*
-                                       (throw (ex-info "Missing value for *site-opts*")))
+                                       (throw (ex-info "Missing value for *site-opts*" {})))
         input (merge defaults {:token token} params)
         
         _     (alter-var-root #'*input* (fn [_] input))
@@ -103,26 +103,3 @@
 
 (def +functions+
   (eval (mapv create-api-form (sort +units+))))
-
-(comment
-  (export-record-next-name)
-  (export-project-xml)
-  (export-record)
-  
-  (import-record
-   {:data [{"age" "15", "name" "Test 2", "form_2_complete" "2", "record_id" "2", "form_1_complete" "2"}]})
-
-  (import-record
-   {:data [{"age" "15", "name" "Test 2", "form_2_complete" "2", "record_id" "3", "form_1_complete" "2"}]})
-  
-  (into {} *unit*)
-  
-  *input*
-  
-  (require 'jvm.tool)
-  (h/prn +functions+)
-  (set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
-                  :token "0CCE5D579105060CB418DB05FCF13045"})
-  (rc/import-metadata
-   
-   {:data []}))

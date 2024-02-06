@@ -15,7 +15,8 @@
                  [xyz.zcaudate/std.json            "4.0.1"]]
   :profiles
   {:dev 
-   {:plugins [[lein-exec "0.3.7"]]
+   {:plugins [[lein-exec "0.3.7"]
+              [cider/cider-nrepl "0.45.0"]]
     :dependencies [[etaoin                          "1.0.40"]
                    [xyz.zcaudate/code.test           "4.0.1"]
                    [xyz.zcaudate/code.manage         "4.0.1"]

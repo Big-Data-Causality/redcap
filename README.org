@@ -1,9 +1,0 @@
-#redcap
-
-REDCap client library for Clojure
-
-## License
-
-Copyright © 2024 Chris Zheng
-
-Distributed under the MIT License.
