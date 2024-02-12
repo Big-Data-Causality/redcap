@@ -5,7 +5,7 @@ REDCap client library for Clojure
     
 ## Usage
 
-```
+```clojure
 (require '[redcap.core :as r])
 
 (rc/set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
@@ -45,13 +45,69 @@ REDCap client library for Clojure
     
 (rc/export-instrument {:format "csv"})
 => "instrument_name,instrument_label\nform_1,\"Form 1\"\nform_2,\"Form 2\"\n"
+  
+(rc/export-metadata)
+=> [{"form_name" "form_1",
+     "matrix_group_name" "",
+     "section_header" "",
+     "text_validation_max" "",
+     "text_validation_type_or_show_slider_number" "",
+     "field_note" "",
+     "custom_alignment" "",
+     "required_field" "",
+     "field_annotation" "",
+     "branching_logic" "",
+     "field_label" "Record ID",
+     "matrix_ranking" "",
+     "identifier" "",
+     "field_type" "text",
+     "question_number" "",
+     "select_choices_or_calculations" "",
+     "text_validation_min" "",
+     "field_name" "record_id"}
+    {"form_name" "form_1",
+     "matrix_group_name" "",
+     "section_header" "",
+     "text_validation_max" "",
+     "text_validation_type_or_show_slider_number" "",
+     "field_note" "",
+     "custom_alignment" "",
+     "required_field" "y",
+     "field_annotation" "",
+     "branching_logic" "",
+     "field_label" "Name",
+     "matrix_ranking" "",
+     "identifier" "",
+     "field_type" "text",
+     "question_number" "",
+     "select_choices_or_calculations" "",
+     "text_validation_min" "",
+     "field_name" "name"}
+    {"form_name" "form_2",
+     "matrix_group_name" "",
+     "section_header" "",
+     "text_validation_max" "200",
+     "text_validation_type_or_show_slider_number" "integer",
+     "field_note" "",
+     "custom_alignment" "",
+     "required_field" "y",
+     "field_annotation" "",
+     "branching_logic" "",
+     "field_label" "Age",
+     "matrix_ranking" "",
+     "identifier" "",
+     "field_type" "text",
+     "question_number" "",
+     "select_choices_or_calculations" "",
+     "text_validation_min" "0",
+     "field_name" "age"}]
 ```
 
 ## Functions
 
 The following are a list of functions available in the `redcap.core` namespace
 
-```
+```clojure
 create-storage-folder
 delete-arm
 delete-dag
@@ -111,89 +167,10 @@ switch-dag
 
 Instruments can be exported and imported into RedCAP
 
-```
-(rc/export-metadata)
-=> [{"form_name" "form_1",
-     "matrix_group_name" "",
-     "section_header" "",
-     "text_validation_max" "",
-     "text_validation_type_or_show_slider_number" "",
-     "field_note" "",
-     "custom_alignment" "",
-     "required_field" "",
-     "field_annotation" "",
-     "branching_logic" "",
-     "field_label" "Record ID",
-     "matrix_ranking" "",
-     "identifier" "",
-     "field_type" "text",
-     "question_number" "",
-     "select_choices_or_calculations" "",
-     "text_validation_min" "",
-     "field_name" "record_id"}
-    {"form_name" "form_1",
-     "matrix_group_name" "",
-     "section_header" "",
-     "text_validation_max" "",
-     "text_validation_type_or_show_slider_number" "",
-     "field_note" "",
-     "custom_alignment" "",
-     "required_field" "y",
-     "field_annotation" "",
-     "branching_logic" "",
-     "field_label" "Name",
-     "matrix_ranking" "",
-     "identifier" "",
-     "field_type" "text",
-     "question_number" "",
-     "select_choices_or_calculations" "",
-     "text_validation_min" "",
-     "field_name" "name"}
-    {"form_name" "form_2",
-     "matrix_group_name" "",
-     "section_header" "",
-     "text_validation_max" "200",
-     "text_validation_type_or_show_slider_number" "integer",
-     "field_note" "",
-     "custom_alignment" "",
-     "required_field" "y",
-     "field_annotation" "",
-     "branching_logic" "",
-     "field_label" "Age",
-     "matrix_ranking" "",
-     "identifier" "",
-     "field_type" "text",
-     "question_number" "",
-     "select_choices_or_calculations" "",
-     "text_validation_min" "0",
-     "field_name" "age"}]
-    
-;; deletes all the instruments 
-(rc/import-metadata
-   {:data []})
-=> 0
-     
-;; imports the instrument stack
-(rc/import-metadata
- {:data [{"form_name" "form_1",
-          "matrix_group_name" "",
-          "section_header" "",
-          "text_validation_max" "",
-          "text_validation_type_or_show_slider_number" "",
-          "field_note" "",
-          "custom_alignment" "",
-          "required_field" "",
-          "field_annotation" "",
-          "branching_logic" "",
-          "field_label" "Record ID",
-          "matrix_ranking" "",
-          "identifier" "",
-          "field_type" "text",
-          "question_number" "",
-          "select_choices_or_calculations" "",
-          "text_validation_min" "",
-          "field_name" "record_id"}]})
-=> 1
+```clojure
+
+
+
 ```
 
 
@@ -201,12 +178,8 @@ Instruments can be exported and imported into RedCAP
 
 Records of surveys can be exported and imported into RedCAP
 
-```
-(rc/export-record {:format "csv"})
-=> "..."
+```clojure
 
-(rc/import-record {:data [{....}]})
-=> {:count 1}
 ```
 
 
@@ -214,7 +187,7 @@ Records of surveys can be exported and imported into RedCAP
 
 The entire project can be exported with the `export-project-xml` function
 
-```
+```clojure
 (rc/export-project-xml)
 => 
 [:odm

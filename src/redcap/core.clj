@@ -58,22 +58,32 @@
            spec] :as unit}
    params
    site-opts]
-  (let [{:keys [url token return]} (or site-opts
-                                       *site-opts*
-                                       (throw (ex-info "Missing value for *site-opts*" {})))
+  (let [{:keys [url token return ignore]
+         :as site-opts} (merge site-opts
+                          *site-opts*)
+        _     (when (not token)
+                (throw (ex-info "Missing values for token" site-opts)))
+        _     (when (not url)
+                (throw (ex-info "Missing values for url" site-opts)))
         input (merge defaults {:token token} params)
         
         _     (alter-var-root #'*input* (fn [_] input))
         _     (alter-var-root #'*unit*  (fn [_] unit))        
-        _     (when (not (m/validate spec input))
+        _     (when (and (not ignore)
+                         (not (m/validate spec input)))
                 (throw (ex-info "Not valid"
                                 {:reason (me/humanize (m/explain spec input))})))
-        interim  (reduce (fn [interim [k f]]
-                           (update interim k f))
-                         input
-                         (seq transforms))
-        _     (alter-var-root #'*interim* (fn [_] interim))
+        interim  (cond ignore
+                       input
+                       
+                       :else
+                       (reduce (fn [interim [k f]]
+                                 (update interim k f))
+                               input
+                               (seq transforms)))
         body  (http/encode-form-params  interim)
+        _     (alter-var-root #'*interim* (fn [_] {:data interim
+                                                   :body body}))
         raw   (http/post url {:headers {"Content-Type" "application/x-www-form-urlencoded"
                                         "Accept" "application/json"}
                               :body body})

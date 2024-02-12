@@ -17,8 +17,7 @@
   {:dev 
    {:plugins [[lein-exec "0.3.7"]
               [cider/cider-nrepl "0.45.0"]]
-    :dependencies [[etaoin                          "1.0.40"]
-                   [xyz.zcaudate/code.test           "4.0.1"]
+    :dependencies [[xyz.zcaudate/code.test           "4.0.1"]
                    [xyz.zcaudate/code.manage         "4.0.1"]
                    [xyz.zcaudate/code.java           "4.0.1"]
                    [xyz.zcaudate/code.maven          "4.0.1"]

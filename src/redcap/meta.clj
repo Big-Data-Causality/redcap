@@ -228,6 +228,7 @@
                                      :return-content     {:type ReturnContentSpec}}}
                   :delete {:content "record"
                            :params  {:roles        {:type [:vector :string]}
+                                     :records      {:type [:vector :string]}
                                      :arms         {:type :string}
                                      :instrument   {:type :string}
                                      :event        {:type :string}}}
