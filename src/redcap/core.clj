@@ -228,6 +228,8 @@
                      field_name
                      form_name
                      select_choices_or_calculations]}]
-          (when (= field_type "dropdown")
+          (when (#{"dropdown"
+                   "radio"
+                   "checkbox"} field_type)
             [[form_name field_name] select_choices_or_calculations]))
         pipeline))

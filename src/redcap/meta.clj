@@ -115,10 +115,10 @@
                                [(str k "___" (+ i 1))
                                 v])
                              vs)
-                            (into {})))
+                            (into out)))
                      {}
                      rm)]
-    (merge (apply dissoc rm rks)
+    (merge (apply dissoc m rks)
            agg)))
 
 (defn record-write
