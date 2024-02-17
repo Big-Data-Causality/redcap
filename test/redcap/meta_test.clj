@@ -30,6 +30,50 @@
   ;; "1970-01-01 10:00"
   => string?)
 
+
+^{:refer redcap.meta/record-read-single :added "0.1"}
+(fact "formats the date"
+  ^:hidden
+
+  (meta/record-read-single
+   {"childcare_days___1" "1"
+    "childcare_days___2" "2"
+    "childcare_days___3" "3"})
+  => {"childcare_days" ["1" "2" "3"]})
+
+
+^{:refer redcap.meta/record-read :added "0.1"}
+(fact "formats the date"
+  ^:hidden
+
+  (meta/record-read
+   [{"childcare_days___1" "1"
+     "childcare_days___2" "2"
+     "childcare_days___3" "3"}])
+  => [{"childcare_days" ["1" "2" "3"]}])
+
+
+
+^{:refer redcap.meta/record-write-single :added "0.1"}
+(fact "formats the date"
+  ^:hidden
+
+  (meta/record-write-single
+   {"childcare_days" ["1" "2" "3"]})
+  => {"childcare_days___1" "1"
+      "childcare_days___2" "2"
+      "childcare_days___3" "3"})
+
+^{:refer redcap.meta/record-write :added "0.1"}
+(fact "formats the date"
+  ^:hidden
+
+  (meta/record-write
+   [{"childcare_days" ["1" "2" "3"]}])
+  => [{"childcare_days___1" "1"
+       "childcare_days___2" "2"
+       "childcare_days___3" "3"}])
+
 ^{:refer redcap.meta/populate-entry :added "0.1"}
 (fact "populates the api entry"
   ^:hidden

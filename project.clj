@@ -1,4 +1,4 @@
-(defproject xyz.zcaudate/redcap "0.1.2"
+(defproject xyz.zcaudate/redcap "0.1.3"
   :description "a redcap client"
   :url "https://github.com/zcaudate-xyz/redcap"
   :license  {:name "MIT License"
@@ -6,7 +6,8 @@
   :aliases
   {"test"  ["exec" "-ep" "(use 'code.test) (def res (run :all)) (System/exit (+ (:failed res) (:thrown res)))"]}
   
-  :dependencies [[org.clojure/clojure "1.11.1"]
+  :dependencies [[org.clojure/clojure  "1.11.1"]
+                 [org.clojure/data.csv "1.0.1"]
                  [metosin/malli                    "0.14.0"]
                  [xyz.zcaudate/net.http            "4.0.1"]
                  [xyz.zcaudate/std.lib             "4.0.1"]

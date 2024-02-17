@@ -105,7 +105,8 @@
   [{:keys [category
            tag
            content
-           params]
+           params
+           output]
     :as input}]
   (let [spec       (generate-unit-spec input)
         defaults   (generate-unit-defaults input)
@@ -114,6 +115,7 @@
      {:input      input
       :transforms transforms
       :defaults   defaults
-      :spec       spec})))
+      :spec       spec
+      :output     output})))
 
 

@@ -81,6 +81,50 @@
    :format         {:type FormatSpec}
    :return-format  {:type FormatSpec}})
 
+(defn record-read-single
+  [m]
+  (let [ks  (keys m)
+        mks (keep (fn [k]
+                    (re-find #"^(.+)___(\d+)$" k))
+                  ks)
+        gks (->> (group-by second mks)
+                 (h/map-vals
+                  (fn [arr]
+                    (sort-by (fn [[_ _ num]]
+                               (parse-long num))
+                             arr))))
+        agg (h/map-vals 
+             (fn [arr]
+               (mapv (fn [[k]] (get m k))
+                     arr))
+             gks)
+        rks (apply dissoc m (map first mks))]
+    (merge agg rks)))
+
+(defn record-read
+  [arr]
+  (mapv record-read-single arr))
+
+(defn record-write-single
+  [m]
+  (let [rm   (h/filter-vals vector? m)
+        rks  (keys rm)
+        agg  (reduce (fn [out [k vs]]
+                       (->> (map-indexed
+                             (fn [i v]
+                               [(str k "___" (+ i 1))
+                                v])
+                             vs)
+                            (into {})))
+                     {}
+                     rm)]
+    (merge (apply dissoc rm rks)
+           agg)))
+
+(defn record-write
+  [arr]
+  (mapv record-write-single arr))
+
 (def +api+
   [[:arm         {:export {:content "arm"
                            :params {:arms      {:type [:vector :string]}}}
@@ -216,13 +260,14 @@
                                                                  (partial format-date "YYYY-MM-DD HH:mm:ss")}
                                      :date-range-end            {:type      inst?
                                                                  :transform
-                                                                 (partial format-date "YYYY-MM-DD HH:mm:ss")}}}
+                                                                 (partial format-date "YYYY-MM-DD HH:mm:ss")}}
+                           :output  {:transform #'record-read}}
                   :import {:content "record"
                            :params  {:type   {:type TypeSpec}
                                      :overwrite-behavior {:type OverwriteSpec}
                                      :force-auto-number  {:type :boolean}
                                      :data      {:type [:vector [:map]]
-                                                 :transform json/write
+                                                 :transform (comp json/write #'record-write)
                                                  :required  true}
                                      :data-format        {:type DateFormatSpec}
                                      :return-content     {:type ReturnContentSpec}}}

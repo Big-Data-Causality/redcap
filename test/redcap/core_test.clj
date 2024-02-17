@@ -1,14 +1,46 @@
 (ns redcap.core-test
   (:use code.test)
-  (:require [redcap.core :as rc]))
+  (:require [redcap.core :as rc]
+            [net.http :as http]
+            [std.string :as str]))
+
+(def +md0+
+  [{"form_name" "form_2",
+    "matrix_group_name" "",
+    "section_header" "",
+    "text_validation_max" "200",
+    "text_validation_type_or_show_slider_number" "integer",
+    "field_note" "",
+    "custom_alignment" "",
+    "required_field" "y",
+    "field_annotation" "",
+    "branching_logic" "",
+    "field_label" "Age",
+    "matrix_ranking" "",
+    "identifier" "",
+    "field_type" "text",
+    "question_number" "",
+    "select_choices_or_calculations" "",
+    "text_validation_min" "0",
+    "field_name" "age"}])
+
+(def +md0-str+
+  (str/|
+   "field_name,form_name,section_header,field_type,field_label,select_choices_or_calculations,field_note,text_validation_type_or_show_slider_number,text_validation_min,text_validation_max,identifier,branching_logic,required_field,custom_alignment,question_number,matrix_group_name,matrix_ranking,field_annotation"
+   "age,form_2,,text,Age,,,integer,0,200,,,y,,,,,\n"))
 
 ^{:refer redcap.core/set-site-opts :added "0.1"}
 (fact "sets the default site opts"
   ^:hidden
+
+  (rc/set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
+                     :token "0CCE5D579105060CB418DB05FCF13045"})
+  => map?
   
   (rc/set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
                      :token "0CCE5D579105060CB418DB05FCF13045"
-                     :return :raw}))
+                     :return :raw})
+  => map?)
 
 ^{:refer redcap.core/with-site-opts :added "0.1"}
 (fact "binds the actual site opts"
@@ -45,6 +77,12 @@
    {:url   "https://redcapdemo.vanderbilt.edu/api/"
     :token "0CCE5D579105060CB418DB05FCF13045"
     :return :raw})
+  => map?
+
+  (http/post "https://redcapdemo.vanderbilt.edu/api/",
+             {:headers {"Content-Type" "application/x-www-form-urlencoded",
+                        "Accept" "application/json"},
+              :body "token=0CCE5D579105060CB418DB05FCF13045&content=version"})
   => map?)
 
 ^{:refer redcap.core/create-api-form :added "0.1"}
@@ -115,93 +153,38 @@
       #'redcap.core/rename-record
       #'redcap.core/switch-dag])
   
-  
-  
+^{:refer redcap.core/metadata->csv :added "0.1"}
+(fact "transforms a vector of instruments into csv format"
+  ^:hidden
 
+  (rc/metadata->csv +md0+)
+  => +md0-str+)
 
-(comment
-  
-  (rc/set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
-                     :token "0CCE5D579105060CB418DB05FCF13045"})
-  (rc/import-metadata
-   {:data []})
-  => 0
+^{:refer redcap.core/csv->metadata :added "0.1"}
+(fact "transforms csv into vector of instruments"
+  ^:hidden
 
-  (rc/export-record)
+  (rc/csv->metadata
+   (rc/metadata->csv
+    +md0+))
+  => +md0+)
   
-  
-  (rc/import-metadata
-   {:data [{"form_name" "form_1",
-            "matrix_group_name" "",
-            "section_header" "",
-            "text_validation_max" "",
-            "text_validation_type_or_show_slider_number" "",
-            "field_note" "",
-            "custom_alignment" "",
-            "required_field" "",
-            "field_annotation" "",
-            "branching_logic" "",
-            "field_label" "Record ID",
-            "matrix_ranking" "",
-            "identifier" "",
-            "field_type" "text",
-            "question_number" "",
-            "select_choices_or_calculations" "",
-            "text_validation_min" "",
-            "field_name" "record_id"}
-           {"form_name" "form_1",
-            "matrix_group_name" "",
-            "section_header" "",
-            "text_validation_max" "",
-            "text_validation_type_or_show_slider_number" "",
-            "field_note" "",
-            "custom_alignment" "",
-            "required_field" "y",
-            "field_annotation" "",
-            "branching_logic" "",
-            "field_label" "Name",
-            "matrix_ranking" "",
-            "identifier" "",
-            "field_type" "text",
-            "question_number" "",
-            "select_choices_or_calculations" "",
-            "text_validation_min" "",
-            "field_name" "name"}
-           {"form_name" "form_2",
-            "matrix_group_name" "",
-            "section_header" "",
-            "text_validation_max" "200",
-            "text_validation_type_or_show_slider_number" "integer",
-            "field_note" "",
-            "custom_alignment" "",
-            "required_field" "y",
-            "field_annotation" "",
-            "branching_logic" "",
-            "field_label" "Age",
-            "matrix_ranking" "",
-            "identifier" "",
-            "field_type" "text",
-            "question_number" "",
-            "select_choices_or_calculations" "",
-            "text_validation_min" "0",
-            "field_name" "age"}]})
-  
-  )
+^{:refer redcap.core/export-pipeline :added "0.1"}
+(fact "exports pipeline from redcap")
 
-
-(comment
-
-  (export-record
-   {:url +demo-url+
-    :token +demo-token+}
-   {:format "xml"})
+^{:refer redcap.core/import-pipeline :added "0.1"}
+(fact "imports pipeline into redcap")
   
-  
-  
-  (http/post "https://redcapdemo.vanderbilt.edu/api/",
-             {:headers {"Content-Type" "application/x-www-form-urlencoded",
-                        "Accept" "application/json"},
-              :body "token=8A3B0ED30F7595CC2615A53E7597F0C7&content=version"}))
+^{:refer redcap.core/get-forms :added "0.1"}
+(fact "gets all form names from the pipeline"
+  ^:hidden
 
-(comment
-  {:url "https://redcapdemo.vanderbilt.edu/api/", :headers {"Content-Type" "application/json", "Accept" "application/json"}, :body "token=8A3B0ED30F7595CC2615A53E7597F0C7&&content=version"})
+  (rc/get-forms +md0+)
+  => ["form_2"])
+
+^{:refer redcap.core/get-fields :added "0.1"}
+(fact "gets all field names from the pipeline"
+  ^:hidden
+
+  (rc/get-fields +md0+)
+  => '(["form_2" ("age")]))
