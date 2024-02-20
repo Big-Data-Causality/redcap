@@ -1,109 +1,14 @@
 # redcap
 
+[![Build Status](https://github.com/zcaudate-xyz/redcap/actions/workflows/clojure.yml/badge.svg)](https://github.com/zcaudate-xyz/redcap/actions)
+[![Clojars Project](https://img.shields.io/clojars/v/xyz.zcaudate/redcap.svg)](https://clojars.org/xyz.zcaudate/redcap)
+
 REDCap client library for Clojure
 
     
 ## Usage
 
-```clojure
-(require '[redcap.core :as r])
-
-(rc/set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
-                   :token "<API TOKEN>"})
-
-(rc/export-project-info)
-=> {"project_pi_lastname" "",
-    "project_irb_number" "",
-    "project_grant_number" "",
-    "bypass_branching_erase_field_prompt" 0,
-    "in_production" 0,
-    "creation_time" "2024-02-05 21:39:47",
-    "external_modules" "",
-    "surveys_enabled" 0,
-    "project_pi_firstname" "",
-    "custom_record_label" "",
-    "production_time" "",
-    "has_repeating_instruments_or_events" 0,
-    "project_title" "Test Project",
-    "project_id" 55912,
-    "ddp_enabled" 0,
-    "missing_data_codes" "",
-    "is_longitudinal" 0,
-    "record_autonumbering_enabled" 1,
-    "secondary_unique_field" "",
-    "display_today_now_button" 1,
-    "randomization_enabled" 0,
-    "scheduling_enabled" 0,
-    "purpose_other" "",
-    "project_notes" "hello",
-    "project_language" "English",
-    "purpose" 0}
-
-(rc/export-instrument)
-=> [{"instrument_label" "Form 1", "instrument_name" "form_1"} 
-    {"instrument_label" "Form 2", "instrument_name" "form_2"}]
-    
-(rc/export-instrument {:format "csv"})
-=> "instrument_name,instrument_label\nform_1,\"Form 1\"\nform_2,\"Form 2\"\n"
-  
-(rc/export-metadata)
-=> [{"form_name" "form_1",
-     "matrix_group_name" "",
-     "section_header" "",
-     "text_validation_max" "",
-     "text_validation_type_or_show_slider_number" "",
-     "field_note" "",
-     "custom_alignment" "",
-     "required_field" "",
-     "field_annotation" "",
-     "branching_logic" "",
-     "field_label" "Record ID",
-     "matrix_ranking" "",
-     "identifier" "",
-     "field_type" "text",
-     "question_number" "",
-     "select_choices_or_calculations" "",
-     "text_validation_min" "",
-     "field_name" "record_id"}
-    {"form_name" "form_1",
-     "matrix_group_name" "",
-     "section_header" "",
-     "text_validation_max" "",
-     "text_validation_type_or_show_slider_number" "",
-     "field_note" "",
-     "custom_alignment" "",
-     "required_field" "y",
-     "field_annotation" "",
-     "branching_logic" "",
-     "field_label" "Name",
-     "matrix_ranking" "",
-     "identifier" "",
-     "field_type" "text",
-     "question_number" "",
-     "select_choices_or_calculations" "",
-     "text_validation_min" "",
-     "field_name" "name"}
-    {"form_name" "form_2",
-     "matrix_group_name" "",
-     "section_header" "",
-     "text_validation_max" "200",
-     "text_validation_type_or_show_slider_number" "integer",
-     "field_note" "",
-     "custom_alignment" "",
-     "required_field" "y",
-     "field_annotation" "",
-     "branching_logic" "",
-     "field_label" "Age",
-     "matrix_ranking" "",
-     "identifier" "",
-     "field_type" "text",
-     "question_number" "",
-     "select_choices_or_calculations" "",
-     "text_validation_min" "0",
-     "field_name" "age"}]
-```
-
-## Functions
+#### All Functions
 
 The following are a list of functions available in the `redcap.core` namespace
 
@@ -162,28 +67,132 @@ rename-record
 switch-dag
 ```
 
-
-### Export/Import Instruments
-
-Instruments can be exported and imported into RedCAP
+#### API Site Options
 
 ```clojure
+(require '[redcap.core :as rc])
 
-
-
+(rc/set-site-opts {:url   "https://redcapdemo.vanderbilt.edu/api/"
+                   :token "<API TOKEN>"})
 ```
 
-
-### Export/Import Records
-
-Records of surveys can be exported and imported into RedCAP
+#### Project Info
 
 ```clojure
+(require '[redcap.core :as rc])
 
+(rc/export-project-info)
+=> {"project_pi_lastname" "",
+    "project_irb_number" "",
+    "project_grant_number" "",
+    "bypass_branching_erase_field_prompt" 0,
+    "in_production" 0,
+    "creation_time" "2024-02-05 21:39:47",
+    "external_modules" "",
+    "surveys_enabled" 0,
+    "project_pi_firstname" "",
+    "custom_record_label" "",
+    "production_time" "",
+    "has_repeating_instruments_or_events" 0,
+    "project_title" "Test Project",
+    "project_id" 55912,
+    "ddp_enabled" 0,
+    "missing_data_codes" "",
+    "is_longitudinal" 0,
+    "record_autonumbering_enabled" 1,
+    "secondary_unique_field" "",
+    "display_today_now_button" 1,
+    "randomization_enabled" 0,
+    "scheduling_enabled" 0,
+    "purpose_other" "",
+    "project_notes" "hello",
+    "project_language" "English",
+    "purpose" 0}
 ```
 
+#### Project Metadata - Export
 
-### Export Project
+```clojure
+(require '[redcap.core :as rc])
+
+(rc/export-metadata)
+=> [{"form_name" "form_1",
+     "matrix_group_name" "",
+     "section_header" "",
+     "text_validation_max" "",
+     "text_validation_type_or_show_slider_number" "",
+     "field_note" "",
+     "custom_alignment" "",
+     "required_field" "",
+     "field_annotation" "",
+     "branching_logic" "",
+     "field_label" "Record ID",
+     "matrix_ranking" "",
+     "identifier" "",
+     "field_type" "text",
+     "question_number" "",
+     "select_choices_or_calculations" "",
+     "text_validation_min" "",
+     "field_name" "record_id"}
+    ;;
+    ;; ... MORE FIELDS ...
+    ;; 
+    {"form_name" "form_2",
+     "matrix_group_name" "",
+     "section_header" "",
+     "text_validation_max" "200",
+     "text_validation_type_or_show_slider_number" "integer",
+     "field_note" "",
+     "custom_alignment" "",
+     "required_field" "y",
+     "field_annotation" "",
+     "branching_logic" "",
+     "field_label" "Age",
+     "matrix_ranking" "",
+     "identifier" "",
+     "field_type" "text",
+     "question_number" "",
+     "select_choices_or_calculations" "",
+     "text_validation_min" "0",
+     "field_name" "age"}]
+```
+
+#### Project Metadata - Import
+
+```clojure
+(require '[redcap.core :as rc])
+
+
+(rc/import-metadata
+ {:format "csv"
+  :data (slurp "sample.csv")}
+ {:ignore true})
+```
+
+#### Project Records - Export
+
+```clojure
+(require '[redcap.core :as rc])
+
+(rc/export-record)
+;; => <EXPORTS ALL RECORDS>
+
+(rc/export-record
+ {:records ["1" "2" "3"]})
+;; => <EXPORTS SELECTED RECORDS>
+```
+
+#### Project Records - Import
+
+```clojure
+(require '[redcap.core :as rc])
+
+(rc/import-record
+ {:data [{...}]})
+;; => <IMPORTS ALL RECORDS>
+```
+
+#### Export Project
 
 The entire project can be exported with the `export-project-xml` function
 
