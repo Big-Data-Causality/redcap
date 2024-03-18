@@ -26,6 +26,8 @@ form-init*
 profiles.clj
 pom.xml
 pom.xml.asc
+.clj-kondo
+.lsp
 /.lein-*
 /.nrepl-port
 .hgignore

@@ -52,31 +52,6 @@
           
           :else body)))
 
-
-(defn- url-encode [s]
-  (.replace (java.net.URLEncoder/encode s "UTF-8") "+" "%20"))
-
-(defn- encode-form-params
-  [params]
-  (->> params
-       (keep (fn [[k v]]
-               (cond (nil? v)
-                     nil
-
-                     (vector? v)
-                     (->> (map-indexed
-                           (fn [i x]
-                             (str (url-encode (h/strn k)) "[" (+ i 1) "]" "=" (url-encode (h/strn x))))
-                           v)
-                          (interpose "&")
-                          (apply str))
-                     
-                     :else
-                     (str (url-encode (h/strn k)) "=" (url-encode (h/strn v))))))
-       (interpose "&")
-       (apply str)))
-
-
 (defn call-api
   "calls the redcap api"
   {:added "0.1"}
@@ -108,7 +83,7 @@
                                  (update interim k f))
                                input
                                (seq transforms)))
-        body  (encode-form-params  interim)
+        body  (http/encode-form-params  interim)
         _     (alter-var-root #'*interim* (fn [_] {:data interim
                                                    :body body}))
         raw   (http/post url {:headers {"Content-Type" "application/x-www-form-urlencoded"
