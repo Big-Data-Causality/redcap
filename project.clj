@@ -1,6 +1,6 @@
-(defproject xyz.zcaudate/redcap "0.1.5"
+(defproject com.bigdatacausality/redcap "0.1.6"
   :description "a redcap client"
-  :url "https://github.com/zcaudate-xyz/redcap"
+  :url "https://github.com/Big-Data-Causality/redcap"
   :license  {:name "MIT License"
              :url  "http://opensource.org/licenses/MIT"}
   :aliases

@@ -1,7 +1,7 @@
 # redcap
 
-[![Build Status](https://github.com/zcaudate-xyz/redcap/actions/workflows/clojure.yml/badge.svg)](https://github.com/zcaudate-xyz/redcap/actions)
-[![Clojars Project](https://img.shields.io/clojars/v/xyz.zcaudate/redcap.svg)](https://clojars.org/xyz.zcaudate/redcap)
+[![Build Status](https://github.com/Big-Data-Causality/redcap/actions/workflows/clojure.yml/badge.svg)](https://github.com/Big-Data-Causality/redcap/actions)
+[![Clojars Project](https://img.shields.io/clojars/v/com.bigdatacausality/redcap.svg)](https://clojars.org/com.bigdatacausality/redcap)
 
 REDCap client library for Clojure
 
